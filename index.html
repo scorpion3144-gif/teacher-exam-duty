@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>115-1 第一次段考教師監考查詢</title>
+<style>
+:root {
+  color-scheme: light;
+  --ink: #18324a;
+  --muted: #607386;
+  --line: #d7e1e8;
+  --paper: #ffffff;
+  --bg: #f3f7fa;
+  --brand: #176b87;
+  --brand-dark: #0d526a;
+  --accent: #e8f4f7;
+  --shadow: 0 8px 24px rgba(31, 64, 85, .08);
+}
+* { box-sizing: border-box; }
+html { min-width: 320px; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
+  line-height: 1.55;
+}
+.page { width: min(1180px, calc(100% - 28px)); margin: 0 auto; padding: 24px 0 42px; }
+.hero {
+  background: linear-gradient(135deg, #125873, #20839a);
+  color: #fff;
+  border-radius: 18px;
+  padding: clamp(22px, 5vw, 38px);
+  box-shadow: var(--shadow);
+}
+.eyebrow { margin: 0 0 6px; font-size: .9rem; letter-spacing: .08em; opacity: .86; }
+h1 { margin: 0; font-size: clamp(1.55rem, 4vw, 2.25rem); line-height: 1.25; letter-spacing: .02em; }
+.subtitle { margin: 12px 0 0; opacity: .9; font-size: .98rem; }
+.panel {
+  margin-top: 18px;
+  padding: clamp(16px, 3vw, 24px);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+}
+.filters { display: grid; grid-template-columns: minmax(220px, 1.7fr) repeat(2, minmax(160px, 1fr)) auto; gap: 14px; align-items: end; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+label { font-size: .9rem; font-weight: 700; color: var(--ink); }
+input, select, button {
+  min-height: 46px;
+  border-radius: 10px;
+  border: 1px solid #b9cbd6;
+  font: inherit;
+}
+input, select { width: 100%; padding: 9px 12px; background: #fff; color: var(--ink); }
+input:focus, select:focus, button:focus-visible { outline: 3px solid rgba(32, 131, 154, .24); outline-offset: 2px; border-color: var(--brand); }
+input::placeholder { color: #8495a1; }
+button { padding: 9px 17px; background: var(--brand); color: #fff; border-color: var(--brand); font-weight: 700; cursor: pointer; white-space: nowrap; }
+button:hover { background: var(--brand-dark); border-color: var(--brand-dark); }
+.summary { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin: 22px 0 14px; }
+.result-count { margin: 0; font-size: 1.05rem; font-weight: 700; }
+.result-count strong { color: var(--brand-dark); font-size: 1.35rem; }
+.hint { margin: 0; color: var(--muted); font-size: .9rem; }
+.results { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 12px; }
+.card { background: var(--paper); border: 1px solid var(--line); border-left: 5px solid var(--brand); border-radius: 12px; padding: 15px 16px; box-shadow: 0 3px 12px rgba(31, 64, 85, .05); }
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.teacher { margin: 0; font-size: 1.08rem; font-weight: 800; }
+.assignment { margin: 14px 0 0; font-size: 1.18rem; font-weight: 800; color: var(--brand-dark); overflow-wrap: anywhere; }
+.meta { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 9px; color: var(--muted); font-size: .92rem; }
+.tag { display: inline-flex; align-items: center; border-radius: 999px; padding: 3px 9px; background: var(--accent); color: var(--brand-dark); font-weight: 700; }
+.empty { padding: 30px 16px; text-align: center; color: var(--muted); border: 1px dashed #b9cbd6; border-radius: 12px; background: #fbfdfe; }
+@media (max-width: 820px) {
+  .filters { grid-template-columns: 1fr 1fr; }
+  .field:first-child { grid-column: 1 / -1; }
+  .clear-wrap { display: flex; align-items: end; }
+  .clear-wrap button { width: 100%; }
+}
+@media (max-width: 520px) {
+  .page { width: min(100% - 20px, 1180px); padding-top: 10px; }
+  .hero { border-radius: 14px; padding: 22px 18px; }
+  .panel { border-radius: 14px; padding: 14px; }
+  .filters { grid-template-columns: 1fr; gap: 11px; }
+  .field:first-child { grid-column: auto; }
+  .results { grid-template-columns: 1fr; }
+  .card { padding: 14px; }
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="hero">
+    <p class="eyebrow">校務查詢</p>
+    <h1>115-1 第一次段考教師監考查詢</h1>
+    <p class="subtitle">輸入教師姓名，或搭配日期與節次篩選監考資料。</p>
+  </header>
+
+  <section class="panel" aria-label="查詢條件">
+    <div class="filters">
+      <div class="field">
+        <label for="teacherSearch">教師姓名</label>
+        <input id="teacherSearch" type="search" placeholder="輸入部分姓名即可搜尋" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="dateFilter">日期</label>
+        <select id="dateFilter">
+          <option value="">全部日期</option>
+          <option value="10/12（一）">10/12（一）</option>
+          <option value="10/13（二）">10/13（二）</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="periodFilter">節次</label>
+        <select id="periodFilter">
+          <option value="">全部節次</option>
+          <option value="1">第一節</option>
+          <option value="2">第二節</option>
+          <option value="3">第三節</option>
+          <option value="4">第四節</option>
+          <option value="5">第五節</option>
+        </select>
+      </div>
+      <div class="clear-wrap">
+        <button id="clearButton" type="button">清除搜尋與篩選</button>
+      </div>
+    </div>
+
+    <div class="summary">
+      <p class="result-count" aria-live="polite">符合資料：<strong id="resultCount">0</strong> 筆</p>
+      <p class="hint">共 64 位教師，資料依原始監考表排列。</p>
+    </div>
+    <div id="results" class="results" aria-live="polite"></div>
+  </section>
+</main>
+
+<script>
+const scheduleData = [{"teacher":"林育賢","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"國二2"},{"teacher":"林育賢","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"國一2"},{"teacher":"林育賢","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"國一2"},{"teacher":"林育賢","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"國一3"},{"teacher":"鄭硯尹","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"國三2"},{"teacher":"鄭硯尹","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"命"},{"teacher":"鄭硯尹","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"國三2"},{"teacher":"鄭硯尹","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"國三2"},{"teacher":"邱沛玲","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"命"},{"teacher":"邱沛玲","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"高二愛"},{"teacher":"邱沛玲","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"高二愛"},{"teacher":"邱沛玲","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"高三愛"},{"teacher":"邱沛玲","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"高二愛"},{"teacher":"張泰瑞","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"國二3"},{"teacher":"張泰瑞","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"國三3"},{"teacher":"張泰瑞","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"高一孝"},{"teacher":"張泰瑞","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"高一信"},{"teacher":"張泰瑞","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"高二仁"},{"teacher":"張泰瑞","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"高一仁"},{"teacher":"林宏亮","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"高三信"},{"teacher":"林宏亮","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"高一愛"},{"teacher":"林宏亮","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"高三信"},{"teacher":"林宏亮","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"高三信"},{"teacher":"林宏亮","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"命"},{"teacher":"周芳如","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"國二4"},{"teacher":"周芳如","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"國二6"},{"teacher":"蔡一德","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"國三1"},{"teacher":"蔡一德","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"國二2"},{"teacher":"康慈愛","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"國二5"},{"teacher":"康慈愛","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"國一1"},{"teacher":"康慈愛","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"高一仁"},{"teacher":"康慈愛","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"國二4"},{"teacher":"康慈愛","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"國三2"},{"teacher":"黃子信","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"高三忠"},{"teacher":"黃子信","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"高三忠"},{"teacher":"黃子信","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"高三忠"},{"teacher":"黃子信","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"高三忠"},{"teacher":"黃子信","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"高三忠"},{"teacher":"黃子信","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"高三忠"},{"teacher":"黃子信","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"命"},{"teacher":"黃子信","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"高三忠"},{"teacher":"黃子信","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"高三忠"},{"teacher":"黃文良","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"高三孝"},{"teacher":"黃文良","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"高三孝"},{"teacher":"黃文良","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"高三孝"},{"teacher":"黃文良","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"命"},{"teacher":"黃文良","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"高三孝"},{"teacher":"黃文良","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"高三孝"},{"teacher":"袁鳳笙","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"命"},{"teacher":"袁鳳笙","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"高三仁"},{"teacher":"袁鳳笙","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"高三仁"},{"teacher":"袁鳳笙","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"高三仁"},{"teacher":"袁鳳笙","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"高三仁"},{"teacher":"袁鳳笙","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"高三仁"},{"teacher":"袁鳳笙","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"高三仁"},{"teacher":"袁鳳笙","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"高三仁"},{"teacher":"鍾慧容","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"高三愛"},{"teacher":"鍾慧容","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"高三愛"},{"teacher":"鍾慧容","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"命"},{"teacher":"鍾慧容","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"高三愛"},{"teacher":"鍾慧容","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"高三愛"},{"teacher":"鍾慧容","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"高三愛"},{"teacher":"鍾慧容","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"高三愛"},{"teacher":"鍾慧容","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"高三愛"},{"teacher":"陳耀祖","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"高三信"},{"teacher":"陳耀祖","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"高三信"},{"teacher":"陳耀祖","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"高三信"},{"teacher":"陳耀祖","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"命"},{"teacher":"陳耀祖","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"高三信"},{"teacher":"陳耀祖","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"高三信"},{"teacher":"陳耀祖","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"高三信"},{"teacher":"張君楷","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"高二忠"},{"teacher":"張君楷","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"高二忠"},{"teacher":"張君楷","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"高二忠+"},{"teacher":"張君楷","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"高二忠"},{"teacher":"張君楷","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"高二忠+"},{"teacher":"張君楷","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"高二忠"},{"teacher":"陳國棟","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"公假"},{"teacher":"陳國棟","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"公假"},{"teacher":"鄭世杰","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"高二仁"},{"teacher":"鄭世杰","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"高二仁"},{"teacher":"鄭世杰","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"高一愛"},{"teacher":"鄭世杰","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"高三信"},{"teacher":"鄭世杰","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"高二仁"},{"teacher":"鄭世杰","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"高二仁"},{"teacher":"蔡孟儒","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"高二愛"},{"teacher":"蔡孟儒","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"高二愛"},{"teacher":"蔡孟儒","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"高三忠+"},{"teacher":"蔡孟儒","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"高二愛"},{"teacher":"蔡孟儒","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"高二愛+"},{"teacher":"蔡孟儒","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"命"},{"teacher":"蔡孟儒","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"高二愛"},{"teacher":"黃宇正","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"高二信"},{"teacher":"黃宇正","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"高二信"},{"teacher":"黃宇正","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"高二信"},{"teacher":"黃宇正","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"命"},{"teacher":"黃宇正","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"高二信"},{"teacher":"黃宇正","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"高二信"},{"teacher":"黃宇正","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"高二信"},{"teacher":"陳慧月","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"高一忠"},{"teacher":"陳慧月","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"高一忠"},{"teacher":"陳慧月","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"高一忠"},{"teacher":"陳慧月","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"高一忠"},{"teacher":"陳慧月","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"高一忠"},{"teacher":"陳慧月","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"高二孝"},{"teacher":"陳慧月","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"高二孝"},{"teacher":"張淑枝","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"高一孝"},{"teacher":"張淑枝","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"高一孝"},{"teacher":"張淑枝","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"高一孝"},{"teacher":"張淑枝","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"命"},{"teacher":"張淑枝","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"高一孝"},{"teacher":"張淑枝","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"高一孝"},{"teacher":"張淑枝","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"高一孝"},{"teacher":"周佩蓉","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"高一仁"},{"teacher":"周佩蓉","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"高一仁"},{"teacher":"周佩蓉","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"高一仁"},{"teacher":"周佩蓉","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"命"},{"teacher":"周佩蓉","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"高一仁"},{"teacher":"張振宇","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"高一愛"},{"teacher":"張振宇","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"高一愛"},{"teacher":"張振宇","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"高一愛"},{"teacher":"張振宇","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"高一愛"},{"teacher":"張振宇","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"高一愛"},{"teacher":"張振宇","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"高一愛"},{"teacher":"林銳","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"高一信"},{"teacher":"林銳","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"高一信"},{"teacher":"林銳","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"命"},{"teacher":"林銳","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"高一信"},{"teacher":"林銳","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"高一信"},{"teacher":"林銳","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"高一信"},{"teacher":"何月娥","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"命"},{"teacher":"何月娥","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"國三1"},{"teacher":"何月娥","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"國三1"},{"teacher":"何月娥","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"國三1"},{"teacher":"何月娥","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"國三1"},{"teacher":"劉娜均","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"國三2"},{"teacher":"劉娜均","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"國三2"},{"teacher":"劉娜均","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"國三2"},{"teacher":"劉娜均","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"國三2"},{"teacher":"劉娜均","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"國三2"},{"teacher":"劉娜均","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"國三2"},{"teacher":"劉娜均","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"命"},{"teacher":"王倫筑","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"國三3"},{"teacher":"王倫筑","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"國三3"},{"teacher":"王倫筑","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"國三3"},{"teacher":"王倫筑","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"國三3"},{"teacher":"王倫筑","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"國三3"},{"teacher":"王倫筑","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"國三3"},{"teacher":"余姿瑩","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"國三4"},{"teacher":"余姿瑩","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"國三4"},{"teacher":"余姿瑩","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"國三4"},{"teacher":"余姿瑩","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"國三4"},{"teacher":"余姿瑩","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"國三4"},{"teacher":"余姿瑩","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"國三4"},{"teacher":"李映柔","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"國三5"},{"teacher":"李映柔","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"國三5"},{"teacher":"李映柔","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"國三5"},{"teacher":"李映柔","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"國三5"},{"teacher":"李映柔","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"國三5"},{"teacher":"李映柔","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"國三5"},{"teacher":"王富寬","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"國二1"},{"teacher":"王富寬","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"高二忠+"},{"teacher":"王富寬","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"高二愛+"},{"teacher":"王富寬","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"國二1"},{"teacher":"王富寬","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"國二1+"},{"teacher":"王富寬","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"國二1"},{"teacher":"陳勝璿","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"國二2"},{"teacher":"陳勝璿","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"高三愛+"},{"teacher":"陳勝璿","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"高一忠"},{"teacher":"陳勝璿","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"國二2"},{"teacher":"陳勝璿","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"國二2"},{"teacher":"陳勝璿","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"國二2"},{"teacher":"鄧靜蓓","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"國二3"},{"teacher":"鄧靜蓓","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"國二3"},{"teacher":"鄧靜蓓","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"國二3"},{"teacher":"鄧靜蓓","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"國二3"},{"teacher":"鄧靜蓓","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"國二3"},{"teacher":"鄧靜蓓","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"國二3"},{"teacher":"許儷瓊","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"命"},{"teacher":"許儷瓊","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"國二4"},{"teacher":"許儷瓊","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"國二4"},{"teacher":"許儷瓊","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"國二4"},{"teacher":"許儷瓊","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"國二4"},{"teacher":"劉芳貞","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"國二5"},{"teacher":"劉芳貞","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"國二5"},{"teacher":"劉芳貞","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"國二5"},{"teacher":"劉芳貞","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"國二5"},{"teacher":"劉芳貞","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"國二5"},{"teacher":"劉芳貞","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"國二5"},{"teacher":"王珊𤧞","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"國二6"},{"teacher":"王珊𤧞","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"國二6"},{"teacher":"王珊𤧞","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"國二6"},{"teacher":"王珊𤧞","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"國二6"},{"teacher":"王珊𤧞","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"國二6"},{"teacher":"王珊𤧞","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"命"},{"teacher":"王珊𤧞","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"國二6"},{"teacher":"王珊𤧞","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"國二6"},{"teacher":"王珊𤧞","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"國二6"},{"teacher":"黃佩綾","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"國一1"},{"teacher":"黃佩綾","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"國一1"},{"teacher":"黃佩綾","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"國一1"},{"teacher":"黃佩綾","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"國一1"},{"teacher":"黃佩綾","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"國一1"},{"teacher":"黃佩綾","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"國一1"},{"teacher":"黃佩綾","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"國一1"},{"teacher":"黃佩綾","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"國一1"},{"teacher":"黃佩綾","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"命"},{"teacher":"姚譯婷","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"國一2"},{"teacher":"姚譯婷","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"國一2"},{"teacher":"姚譯婷","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"國一2"},{"teacher":"姚譯婷","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"命"},{"teacher":"姚譯婷","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"國一2"},{"teacher":"姚譯婷","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"國一2"},{"teacher":"姚譯婷","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"國一2"},{"teacher":"彭舒渝","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"國一3"},{"teacher":"彭舒渝","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"國一3"},{"teacher":"彭舒渝","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"國一3"},{"teacher":"彭舒渝","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"國一3"},{"teacher":"彭舒渝","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"國一3"},{"teacher":"彭舒渝","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"國一3"},{"teacher":"葉峰銘","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"國一4"},{"teacher":"葉峰銘","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"國一4"},{"teacher":"葉峰銘","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"國一4"},{"teacher":"葉峰銘","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"國一4"},{"teacher":"葉峰銘","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"命"},{"teacher":"葉峰銘","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"國一4"},{"teacher":"葉峰銘","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"國一4"},{"teacher":"崔茗喬","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"國一5"},{"teacher":"崔茗喬","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"國一5"},{"teacher":"崔茗喬","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"國一5"},{"teacher":"崔茗喬","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"國一5"},{"teacher":"崔茗喬","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"國一5"},{"teacher":"崔茗喬","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"國一5"},{"teacher":"崔茗喬","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"國一5"},{"teacher":"蔡宜錡","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"命"},{"teacher":"蔡宜錡","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"高二信"},{"teacher":"蔡宜錡","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"高二孝"},{"teacher":"蔡宜錡","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"高二信"},{"teacher":"宋筱涵","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"命"},{"teacher":"宋筱涵","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"國一4"},{"teacher":"宋筱涵","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"國一4"},{"teacher":"廖于婷","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"國三1"},{"teacher":"廖于婷","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"國一5"},{"teacher":"廖于婷","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"國二1"},{"teacher":"廖于婷","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"國二2"},{"teacher":"廖于婷","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"國二5"},{"teacher":"廖于婷","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"國二2"},{"teacher":"廖于婷","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"國一3"},{"teacher":"黃雅薇","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"國一4"},{"teacher":"黃雅薇","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"高一信"},{"teacher":"黃雅薇","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"國一4"},{"teacher":"黃雅薇","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"高一仁"},{"teacher":"黃雅薇","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"高三孝"},{"teacher":"黃雅薇","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"高三孝"},{"teacher":"黃雅薇","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"高三孝"},{"teacher":"周鉦凱","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"高一忠"},{"teacher":"周鉦凱","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"高一忠"},{"teacher":"李憶湘","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"高三仁"},{"teacher":"李憶湘","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"高三仁"},{"teacher":"李憶湘","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"高二仁"},{"teacher":"李憶湘","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"高三愛"},{"teacher":"李憶湘","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"高二仁"},{"teacher":"林芳菁","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"國一2"},{"teacher":"林芳菁","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"國二1"},{"teacher":"林芳菁","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"高一仁"},{"teacher":"林芳菁","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"高一仁"},{"teacher":"鄭月美","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"高一孝"},{"teacher":"蔡名益","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"高二信"},{"teacher":"蔡名益","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"高二仁"},{"teacher":"蔡名益","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"高一孝"},{"teacher":"黃倫慧","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"國三4"},{"teacher":"徐世豪","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"國二5"},{"teacher":"徐世豪","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"國三5"},{"teacher":"徐世豪","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"國三5"},{"teacher":"徐世豪","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"國三4"},{"teacher":"徐世豪","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"國三4"},{"teacher":"徐世豪","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"命"},{"teacher":"陳東諒","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"國三4"},{"teacher":"陳東諒","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"國一5"},{"teacher":"陳東諒","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"國二4"},{"teacher":"陳東諒","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"國二4"},{"teacher":"陳東諒","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"國三3"},{"teacher":"林錫鴻","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"國二4"},{"teacher":"洪浩","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"命"},{"teacher":"洪浩","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"國二3"},{"teacher":"洪浩","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"國二6"},{"teacher":"洪浩","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"國一5"},{"teacher":"洪浩","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"國二3"},{"teacher":"羅碩文","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"高二孝"},{"teacher":"羅碩文","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"高二孝"},{"teacher":"羅碩文","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"高二孝"},{"teacher":"羅碩文","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"高三孝"},{"teacher":"羅碩文","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"高三孝"},{"teacher":"羅碩文","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"高二孝"},{"teacher":"羅碩文","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"高二孝"},{"teacher":"羅碩文","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"高二孝"},{"teacher":"鄭松元","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"命"},{"teacher":"鄭松元","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"國三1"},{"teacher":"鄭松元","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"國三3"},{"teacher":"鄭松元","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"國三3"},{"teacher":"鄭松元","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"國二1"},{"teacher":"鄭松元","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"國三5"},{"teacher":"鄭松元","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"國三5"},{"teacher":"劉明智","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"命"},{"teacher":"劉明智","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"高一仁"},{"teacher":"劉明智","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"高一愛"},{"teacher":"劉明智","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"高二忠"},{"teacher":"劉明智","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"高二仁"},{"teacher":"劉明智","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"高二忠"},{"teacher":"簡寶益","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"命"},{"teacher":"簡寶益","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"高一信"},{"teacher":"簡寶益","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"高一忠"},{"teacher":"鄭儒鴻","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"高二忠"},{"teacher":"鄭儒鴻","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"高一信"},{"teacher":"鄭儒鴻","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"高三忠"},{"teacher":"鄭儒鴻","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"高一愛"},{"teacher":"鄭儒鴻","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"高一信"},{"teacher":"林俊道","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"高二愛"},{"teacher":"謝季恩","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"高二仁"},{"teacher":"謝季恩","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"高二孝"},{"teacher":"謝季恩","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"高三仁"},{"teacher":"謝季恩","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"高二信"},{"teacher":"謝季恩","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"國二1"},{"teacher":"郭育瑄","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"命"},{"teacher":"郭育瑄","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"國二5"},{"teacher":"郭育瑄","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"國一1"},{"teacher":"曾莉迎","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"國二1"},{"teacher":"曾莉迎","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"國一2"},{"teacher":"曾莉迎","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"國二2"},{"teacher":"曾莉迎","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"國一3"},{"teacher":"曾雍淑","date":"10/13（二）","period":1,"periodLabel":"第一節","content":"高一孝"},{"teacher":"曾雍淑","date":"10/13（二）","period":2,"periodLabel":"第二節","content":"國三1"},{"teacher":"曾雍淑","date":"10/13（二）","period":3,"periodLabel":"第三節","content":"高一忠"},{"teacher":"曾雍淑","date":"10/13（二）","period":4,"periodLabel":"第四節","content":"國三1"},{"teacher":"曾雍淑","date":"10/13（二）","period":5,"periodLabel":"第五節","content":"國三1"},{"teacher":"陳淑娥","date":"10/12（一）","period":1,"periodLabel":"第一節","content":"國二2"},{"teacher":"陳淑娥","date":"10/12（一）","period":2,"periodLabel":"第二節","content":"國一3"},{"teacher":"陳淑娥","date":"10/12（一）","period":3,"periodLabel":"第三節","content":"國二3"},{"teacher":"陳淑娥","date":"10/12（一）","period":4,"periodLabel":"第四節","content":"國二1"},{"teacher":"陳淑娥","date":"10/12（一）","period":5,"periodLabel":"第五節","content":"國二4"}];
+const teacherSearch = document.getElementById('teacherSearch');
+const dateFilter = document.getElementById('dateFilter');
+const periodFilter = document.getElementById('periodFilter');
+const clearButton = document.getElementById('clearButton');
+const resultCount = document.getElementById('resultCount');
+const results = document.getElementById('results');
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>'"]/g, function(character) {
+    return {'&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'}[character];
+  });
+}
+
+function renderResults() {
+  const keyword = teacherSearch.value.trim().toLocaleLowerCase();
+  const date = dateFilter.value;
+  const period = periodFilter.value;
+  const filtered = scheduleData.filter(function(item) {
+    const teacherMatches = !keyword || item.teacher.toLocaleLowerCase().includes(keyword);
+    const dateMatches = !date || item.date === date;
+    const periodMatches = !period || String(item.period) === period;
+    return teacherMatches && dateMatches && periodMatches;
+  });
+
+  resultCount.textContent = filtered.length;
+  if (!filtered.length) {
+    results.innerHTML = '<div class="empty">找不到符合目前條件的監考資料，請調整搜尋或篩選條件。</div>';
+    return;
+  }
+
+  results.innerHTML = filtered.map(function(item) {
+    return '<article class="card">' +
+      '<div class="card-top"><h2 class="teacher">' + escapeHtml(item.teacher) + '</h2>' +
+      '<span class="tag">' + escapeHtml(item.periodLabel) + '</span></div>' +
+      '<div class="meta"><span>' + escapeHtml(item.date) + '</span></div>' +
+      '<p class="assignment">' + escapeHtml(item.content) + '</p>' +
+      '</article>';
+  }).join('');
+}
+
+[teacherSearch, dateFilter, periodFilter].forEach(function(element) {
+  element.addEventListener('input', renderResults);
+  element.addEventListener('change', renderResults);
+});
+clearButton.addEventListener('click', function() {
+  teacherSearch.value = '';
+  dateFilter.value = '';
+  periodFilter.value = '';
+  teacherSearch.focus();
+  renderResults();
+});
+renderResults();
+</script>
+</body>
+</html>
